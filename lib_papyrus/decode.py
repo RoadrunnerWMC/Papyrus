@@ -44,7 +44,8 @@ def convert_field_value_to_str(item_type_name: str, field_name: str, field_value
         return hex(field_value)
 
     elif item_type_name.startswith('background_layer_') and field_name.startswith('file_id_'):
-        return hex(field_value)
+        # most similar representation to the Object folder filenames
+        return f'0x{field_value:04X}'
 
     elif field_name == 'flags':
         return hex(field_value)
