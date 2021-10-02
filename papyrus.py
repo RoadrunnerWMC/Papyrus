@@ -25,7 +25,7 @@ def main(argv:list=None) -> None:
         game = p_args.game
         input_file = p_args.input_file
         file_format_version = p_args.file_format_version
-        display_fields = (p_args.display_fields == 'true')
+        display_fields = p_args.display_fields
 
         output_file = p_args.output_file
         if output_file is None: output_file = input_file.with_suffix('.txt')
@@ -40,8 +40,8 @@ def main(argv:list=None) -> None:
         help='output file')
     parser_decode.add_argument('--file-format-version', nargs='?',
         help='file-format version to use (default: latest)')
-    parser_decode.add_argument('--display-fields', choices=['true', 'false'], default='true',
-        help='show field values for each item, instead of just the raw hex data (default: true)')
+    parser_decode.add_argument('--display-fields', choices=['none', 'nonempty', 'all'], default='all',
+        help='show field values for each item, instead of just the raw hex data (default: all)')
     parser_decode.set_defaults(func=handle_decode)
 
     def handle_encode(p_args: object) -> None:

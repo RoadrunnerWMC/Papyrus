@@ -81,7 +81,7 @@ def convert_field_value_to_str(item_type_name: str, field_name: str, field_value
 
 
 def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', *,
-        display_fields:bool=True) -> List[str]:
+        display_fields:str='all') -> List[str]:
     """
     Create a textual representation of the provided struct.
     """
@@ -89,9 +89,15 @@ def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', *,
 
     lines.append(f'{item_type_name}: [{spritedata_style_bytes_hex_string(bytes(item))}]')
 
-    if display_fields:
-        for field_name in item.fields.keys():
+    if display_fields != 'none':
+        for field_name, field in item.fields.items():
             field_value = item.get(field_name)
+
+            if display_fields == 'nonempty' and field_value == field.empty_value():
+                # make an exception for fields named "id", since 0 is
+                # obviously still a useful value to display for such fields
+                if field_name != 'id':
+                    continue
 
             field_value_str = convert_field_value_to_str(item_type_name, field_name, field_value)
             if field_value_str is not None:
@@ -101,7 +107,7 @@ def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', *,
 
 
 def convert_level_to_text(api: 'LevelAPI', level: 'Level', input_filename: str, output_file: Path, *,
-        display_fields:bool=True) -> str:
+        display_fields:str='all') -> str:
     """
     Handles the actual text generation stuff
     """
@@ -143,7 +149,7 @@ def convert_level_to_text(api: 'LevelAPI', level: 'Level', input_filename: str, 
 
 
 def decode(game: nsmbpy2.Game, input_file: Path, output_file: Path, file_format_version: Optional[str], *,
-        display_fields:bool=True) -> None:
+        display_fields:str='all') -> None:
     """
     Main function for decoding a level.
     """
