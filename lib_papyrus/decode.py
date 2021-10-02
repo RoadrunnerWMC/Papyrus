@@ -107,22 +107,22 @@ def convert_level_to_text(api: 'LevelAPI', level: 'Level', input_filename: str, 
     lines = []
     lines.append(f'# Converted by {TOOL_NAME} {VERSION_NAME} from {input_filename} at {datetime.datetime.now().isoformat()}')
     lines.append('')
-    lines.append(f'game: {api.game.value}')
-    lines.append(f'file_format_version: {api.api_version}')
+    lines.append(f'set game {api.game.value}')
+    lines.append(f'set file_format_version {api.api_version}')
     lines.append('')
 
     for area_num, area in enumerate(level.areas):
         lines.append('')
-        lines.append(f'area: {area_num+1}')
+        lines.append(f'set area {area_num+1}')
 
         if area.metadata:
-            lines.append(f'area_metadata: [{spritedata_style_bytes_hex_string(area.metadata)}]')
+            lines.append(f'set area_metadata [{spritedata_style_bytes_hex_string(area.metadata)}]')
 
         for layer_num in sorted(area.layers):
             layer = area.layers[layer_num]
 
             lines.append('')
-            lines.append(f'layer: {layer_num}')
+            lines.append(f'set layer {layer_num}')
 
             for obj in layer:
                 lines.append('')
