@@ -137,6 +137,7 @@ def convert_level_to_text(api: 'LevelAPI', level: 'Level', input_filename: str, 
                 lines.append('')
                 lines.extend(decode_struct_as_lines(item_name, block, display_fields=display_fields))
 
+    lines.append('')
     return '\n'.join(lines)
 
 
