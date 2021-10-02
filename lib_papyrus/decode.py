@@ -57,8 +57,16 @@ def convert_field_value_to_str(item_type_name: str, field_name: str, field_value
 
     elif isinstance(field_value, enum.IntEnum):
         field_value_str = field_value.name
+
+        semantic_value = None
         if hasattr(field_value, 'semantic_value') and field_value.semantic_value is not None:
-            field_value_str += f'  # {field_value.semantic_value}'
+            semantic_value = field_value.semantic_value
+
+        if semantic_value is None:
+            field_value_str += f'  # ({field_value.value})'
+        else:
+            field_value_str += f'  # ({field_value.value}: {field_value.semantic_value})'
+
         return field_value_str
 
     elif isinstance(field_value, str):
@@ -91,8 +99,8 @@ def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', *,
     return lines
 
 
-def decode_level_to_file(api: 'LevelAPI', level: 'Level', input_filename: str, output_file: Path, *,
-        display_fields:bool=True) -> None:
+def convert_level_to_text(api: 'LevelAPI', level: 'Level', input_filename: str, output_file: Path, *,
+        display_fields:bool=True) -> str:
     """
     Handles the actual text generation stuff
     """
@@ -129,10 +137,7 @@ def decode_level_to_file(api: 'LevelAPI', level: 'Level', input_filename: str, o
                 lines.append('')
                 lines.extend(decode_struct_as_lines(item_name, block, display_fields=display_fields))
 
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for line in lines:
-            f.write(line)
-            f.write('\n')
+    return '\n'.join(lines)
 
 
 def decode(game: nsmbpy2.Game, input_file: Path, output_file: Path, file_format_version: Optional[str], *,
@@ -147,4 +152,7 @@ def decode(game: nsmbpy2.Game, input_file: Path, output_file: Path, file_format_
     api = nsmbpy2.level.get(game, file_format_version)
     level = api.Level.load_from_file(input_file)
 
-    decode_level_to_file(api, level, input_file.name, output_file, display_fields=display_fields)
+    level_txt = convert_level_to_text(
+        api, level, input_file.name, output_file, display_fields=display_fields)
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(level_txt)
