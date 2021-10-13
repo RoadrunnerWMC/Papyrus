@@ -29,3 +29,12 @@ Occasionally there are situations that are just inherently awkward to deal with 
 For example, a fancy level design may call for a dozen or more rotation controllers all at the same position. This isn't difficult to set up, but tweaking them afterwards requires annoyingly "unstacking" and "restacking" them every time. But if they're defined in a text file, there's no unstacking required, and editing them is a breeze.
 
 Or as another example, there are a few situations in which the order in which sprites appear in the level data affects their behavior. Most graphical editors don't provide a general way to reorder sprites; all you can do is delete and recreate them to move them to the top of the list. Papyrus shows you the exact order in which everything will appear in the level data, so you can rearrange sprites directly however you want.
+
+## Roadmap
+
+In anticipated chronological order:
+
+* Saving, except for spritedata fields
+* Spritedata
+* Support for the other NSMB games
+* Matching tileset editor
