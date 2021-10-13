@@ -1,6 +1,6 @@
 # Papyrus
 
-_A text-based level editor for the New Super Mario Bros. series, powered by nsmbpy2_
+_A text-based level editor for the New Super Mario Bros. series, powered by [nsmbpy2](https://github.com/RoadrunnerWMC/nsmbpy)_
 
 WIP. Everything subject to change, including the name.
 
