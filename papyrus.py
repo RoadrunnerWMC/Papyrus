@@ -25,8 +25,14 @@ def main(argv:list=None) -> None:
         output_file = p_args.output_file
         if output_file is None: output_file = p_args.input_file.with_suffix('.txt')
 
+        if p_args.game is None:
+            game = None
+        else:
+            # note: argparse filters out invalid game names for us already
+            game = nsmbpy2.Game(p_args.game)
+
         lib_papyrus.decode.decode(lib_papyrus.decode.DecodingConfig(
-            game=p_args.game,
+            game=game,
             input_file=p_args.input_file,
             output_file=output_file,
             file_format_version=p_args.file_format_version,
