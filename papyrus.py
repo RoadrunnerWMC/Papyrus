@@ -22,15 +22,15 @@ def main(argv:list=None) -> None:
         """
         Handle the "decode" command.
         """
-        game = p_args.game
-        input_file = p_args.input_file
-        file_format_version = p_args.file_format_version
-        display_fields = p_args.display_fields
-
         output_file = p_args.output_file
-        if output_file is None: output_file = input_file.with_suffix('.txt')
+        if output_file is None: output_file = p_args.input_file.with_suffix('.txt')
 
-        lib_papyrus.decode.decode(game, input_file, output_file, file_format_version, display_fields=display_fields)
+        lib_papyrus.decode.decode(lib_papyrus.decode.DecodingConfig(
+            game=p_args.game,
+            input_file=p_args.input_file,
+            output_file=output_file,
+            file_format_version=p_args.file_format_version,
+            display_fields=p_args.display_fields))
 
     parser_decode = subparsers.add_parser('decode',
         help='convert a level from a binary file to a text file')
