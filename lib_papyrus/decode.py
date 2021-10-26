@@ -98,7 +98,7 @@ def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', config: Deco
     """
     lines = []
 
-    lines.append(f'{item_type_name}: [{spritedata_style_bytes_hex_string(bytes(item))}]')
+    lines.append(f'add {item_type_name}: [{spritedata_style_bytes_hex_string(bytes(item))}]')
 
     if config.display_fields != 'none':
         for field_name, field in item.fields.items():
@@ -112,7 +112,7 @@ def decode_struct_as_lines(item_type_name: str, item: 'BaseStruct', config: Deco
 
             field_value_str = convert_field_value_to_str(item_type_name, field_name, field_value, config)
             if field_value_str is not None:
-                lines.append(f'    {field_name}: {field_value_str}')
+                lines.append(f'    set {field_name} {field_value_str}')
 
     return lines
 
