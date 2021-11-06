@@ -124,8 +124,8 @@ def convert_level_to_text(api: 'LevelAPI', level: 'Level', config: DecodingConfi
     lines = []
     lines.append(f'# Converted by {TOOL_NAME} {VERSION_NAME} from {config.input_file.name} at {datetime.datetime.now().isoformat()}')
     lines.append('')
-    lines.append(f"set game '{api.game.value}'")
-    lines.append(f"set file_format_version '{api.api_version}'")
+    lines.append(f'set game "{api.game.value}"')
+    lines.append(f'set file_format_version "{api.api_version}"')
     lines.append('')
 
     for area_num, area in enumerate(level.areas):

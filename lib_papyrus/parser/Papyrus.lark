@@ -1,0 +1,67 @@
+start: statements
+
+statements: statement*
+statement : single_line_statement | block_statement
+single_line_statement : standalone_line _NL
+block_statement : block_starting_line _NL block_lines?
+
+block_lines : _INDENT standalone_line (_NL standalone_line)* _NL _DEDENT
+
+block_starting_line : add_line | update_line
+standalone_line : set_line | delete_line | run_line | comment_only_line
+
+// start: NEWLINE* (any_line NEWLINE+)*
+
+// any_line : set_line | add_line | delete_line | update_line | run_line | comment_only_line
+
+set_line : verb_set NAME set_line_value line_ending_junk
+add_line : verb_add NAME add_line_name? ":" add_line_value? line_ending_junk
+add_line_name : NAME
+add_line_value : bytes_literal
+delete_line : verb_delete NAME object_name_searchable line_ending_junk
+update_line : verb_update NAME object_name_searchable ":" line_ending_junk
+run_line : verb_run macro line_ending_junk
+comment_only_line : line_ending_junk
+
+set_line_value : any_literal_or_name | object_attribute | macro
+
+line_ending_junk : SH_COMMENT?
+
+object_name_searchable : NAME | macro
+
+macro : NAME "(" [macro_args] ")"
+macro_args : macro_arg ("," macro_arg)*
+macro_arg : macro_positional_arg | macro_keyword_arg
+macro_positional_arg : any_literal_or_name
+macro_keyword_arg : NAME "=" any_literal_or_name
+
+object_attribute : NAME "." NAME
+
+any_literal_or_name : any_literal | NAME
+
+any_literal : bool_literal | int_literal | string_literal | bytes_literal
+
+verb_set : "set"
+verb_add : "add"
+verb_delete : "delete"
+verb_update : "update"
+verb_run : "run"
+
+!bool_literal : "true" | "false"
+!int_literal : ["+"|"-"] (DIGIT+ | (("0x" | "0X") HEXDIGIT+))
+string_literal : ESCAPED_STRING
+bytes_literal : "[" HEXDIGIT* "]"
+
+%ignore WS_INLINE
+
+%import common.CNAME -> NAME
+%import common.DIGIT
+%import common.ESCAPED_STRING
+%import common.HEXDIGIT
+%import common.NEWLINE
+%import common.SH_COMMENT
+%import common.WS_INLINE
+
+%declare _INDENT _DEDENT
+
+_NL: /(\r?\n[\t ]*)+/
